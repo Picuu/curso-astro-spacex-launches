@@ -1,0 +1,35 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import { getLatestLaunches, getLaunchById } from "../../services/spacex"
+
+export const prerender = false
+
+const { id } = Astro.params
+
+console.log({ id })
+
+let launch
+if (id) {
+    launch = await getLaunchById({ id })
+}
+
+// EN CASO DE QUE FUERA UNA PÁGINA ESTÁTICA
+// export async function getStaticPaths() {
+//     // llamar a una API externa
+//     // para indicar a Astro todas las rutas (páginas) que debe generar
+
+//     const launches = await getLatestLaunches()
+
+//     return launches.map(launch => ({
+//         params: { id: launch.id }
+//     }))
+// }
+---
+
+<Layout title={`Lanzamiento ${id}`}>
+    <article>
+        <img src={launch?.links?.patch.small} alt={`Patch for launch ${launch?.id}`}>
+        <h1>{launch?.name}</h1>
+        <p>{launch?.details}</p>
+    </article>
+</Layout>
